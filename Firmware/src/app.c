@@ -18,11 +18,6 @@ void main(void) {
         wait_20ms();
         io_out_powerOff();
 
-        // sleep 10 seconds
-        for (int i = 0; i < 9; i++) { // 9 * 1.15 seconds
-            CLRWDT();
-            SLEEP();
-            NOP();
-        }
+        wait_8s();
     }
 }
