@@ -15,7 +15,22 @@
 
     #define wait_20ms()   __delay_ms(20);
     #define wait_short()  __delay_ms(150);
-    #define wait_8s()     for (int i = 0; i < 7; i++) { CLRWDT(); SLEEP(); NOP(); }
+    #define wait_8s()     for (int i = 0; i < 7; i++) { CLRWDT(); SLEEP(); NOP(); }  // 7 * 18ms * 64
+
+#elif defined(_10F220) || defined(_10F222)
+
+    // CONFIG
+    #pragma config IOSCFS = 4MHZ    // Internal Oscillator Frequency Select bit (4 MHz)
+    #pragma config MCPU = OFF       // Master Clear Pull-up Enable bit (Pull-up disabled)
+    #pragma config WDTE = ON        // Watchdog Timer Enable bit (WDT enabled)
+    #pragma config CP = OFF         // Code protection bit (Code protection off)
+    #pragma config MCLRE = ON       // GP3/MCLR Pin Function Select bit (GP3/MCLR pin function is MCLR)
+
+    #define _XTAL_FREQ 4000000
+
+    #define wait_20ms()   __delay_ms(20);
+    #define wait_short()  __delay_ms(150);
+    #define wait_8s()     for (int i = 0; i < 7; i++) { CLRWDT(); SLEEP(); NOP(); }  // 7 * 18ms * 64
 
 #elif defined(_10F320) || defined(_10F322)
 
@@ -39,14 +54,14 @@
 
 #else
 
-    #error "Only PIC10F20x and PIC10F32x devices are supported"
+    #error "Only PIC10F20x PIC10F22x, and PIC10F32x devices are supported"
 
 #endif
 
 void init(void) {
 
-#if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206)
-    // Watchdog timer
+// Watchdog timer
+#if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206) || defined(_10F220) || defined(_10F222)
     OPTION = 0b11111110;  // Prescaler assigned to the WDT and set to 1:64
 #else
     WDTCONbits.SWDTEN = 1;       // WDT turned on

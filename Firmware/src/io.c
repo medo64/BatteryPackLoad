@@ -2,7 +2,7 @@
 
 void io_setup() {
 
-#if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206)
+#if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206) || defined(_10F220) || defined(_10F222)
     GP2 = 0;                // turn off GP2
     TRISGPIO = 0b11111011;  // GP2 is output
 #else
