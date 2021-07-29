@@ -7,15 +7,9 @@
 #if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206)
 
     // CONFIG
-    #pragma config WDTE = ON        // Watchdog Timer (WDT enabled)
+    #pragma config WDTE = OFF       // Watchdog Timer (WDT enabled)
     #pragma config CP = OFF         // Code Protect (Code protection off)
     #pragma config MCLRE = ON       // Master Clear Enable (GP3/MCLR pin function  is MCLR)
-
-    #define _XTAL_FREQ 4000000
-
-    #define wait_20ms()   __delay_ms(20);
-    #define wait_short()  __delay_ms(150);
-    #define wait_8s()     for (int i = 0; i < 7; i++) { CLRWDT(); SLEEP(); NOP(); }  // 7 * 18ms * 64
 
 #elif defined(_10F220) || defined(_10F222)
 
@@ -25,12 +19,6 @@
     #pragma config WDTE = ON        // Watchdog Timer Enable bit (WDT enabled)
     #pragma config CP = OFF         // Code protection bit (Code protection off)
     #pragma config MCLRE = ON       // GP3/MCLR Pin Function Select bit (GP3/MCLR pin function is MCLR)
-
-    #define _XTAL_FREQ 4000000
-
-    #define wait_20ms()   __delay_ms(20);
-    #define wait_short()  __delay_ms(150);
-    #define wait_8s()     for (int i = 0; i < 7; i++) { CLRWDT(); SLEEP(); NOP(); }  // 7 * 18ms * 64
 
 #elif defined(_10F320) || defined(_10F322)
 
@@ -46,26 +34,24 @@
     #pragma config BORV = LO        // Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
     #pragma config WRT = OFF        // Flash Memory Self-Write Protection (Write protection off)
 
-    #define _XTAL_FREQ 4000000
-
-    #define wait_20ms()   __delay_ms(20);
-    #define wait_short()  __delay_ms(150);
-    #define wait_8s()     CLRWDT(); SLEEP(); NOP();
-
 #else
 
     #error "Only PIC10F20x PIC10F22x, and PIC10F32x devices are supported"
 
 #endif
 
+
+#define _XTAL_FREQ 4000000
+
+#define wait_20ms()   CLRWDT(); __delay_ms(20);
+#define wait_short()  CLRWDT(); __delay_ms(150);
+#define wait_10s()    __delay_ms(10000);
+
+
 void init(void) {
 
-// Watchdog timer
 #if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206) || defined(_10F220) || defined(_10F222)
-    OPTION = 0b11111110;  // Prescaler assigned to the WDT and set to 1:64
-#else
-    WDTCONbits.SWDTEN = 1;       // WDT turned on
-    WDTCONbits.WDTPS = 0b01101;  // 8s interval
+    OPTION = 0b11011111;  // disabled T0CKI
 #endif
 
 }

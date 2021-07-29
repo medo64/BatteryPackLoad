@@ -8,7 +8,7 @@ There is a simpler version that doesn't use microcontroller available at
 to complicate things.
 
 This device will pulse load every 10 seconds thus having 0.2& duty cycle for
-average consumption of 0.5 mA.
+average consumption less than 1 mA.
 
 ---
 

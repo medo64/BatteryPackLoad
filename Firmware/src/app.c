@@ -7,7 +7,6 @@ void main(void) {
     io_setup();
 
     // initial twinkle - total of two short bursts including one from the loop
-    CLRWDT();
     io_out_powerOn(); wait_20ms();
     io_out_powerOff(); wait_short();
 
@@ -18,6 +17,6 @@ void main(void) {
         wait_20ms();
         io_out_powerOff();
 
-        wait_8s();
+        wait_10s();
     }
 }
