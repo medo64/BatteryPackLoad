@@ -7,7 +7,7 @@
 #if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206)
 
     // CONFIG
-    #pragma config WDTE = OFF       // Watchdog Timer (WDT enabled)
+    #pragma config WDTE = ON        // Watchdog Timer (WDT enabled)
     #pragma config CP = OFF         // Code Protect (Code protection off)
     #pragma config MCLRE = ON       // Master Clear Enable (GP3/MCLR pin function  is MCLR)
 
@@ -27,7 +27,7 @@
     // CONFIG
     #pragma config FOSC = INTOSC    // Oscillator Selection bits (INTOSC oscillator: CLKIN function disabled)
     #pragma config BOREN = ON       // Brown-out Reset Enable (Brown-out Reset enabled)
-    #pragma config WDTE = OFF       // Watchdog Timer Disable (WDT disabled)
+    #pragma config WDTE =  ON       // Watchdog Timer Enable (WDT enabled)
     #pragma config PWRTE = ON       // Power-up Timer Enable bit (PWRT enabled)
     #pragma config MCLRE = ON       // MCLR Pin Function Select bit (MCLR pin function is MCLR)
     #pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
@@ -47,15 +47,16 @@
 
 #define wait_20ms()   CLRWDT(); __delay_ms(20);
 #define wait_short()  CLRWDT(); __delay_ms(150);
-#define wait_10s()    __delay_ms(10000);
+#define wait_10s()    for(int i=0; i<50; i++) { CLRWDT(); __delay_ms(200); }
 
 
 void init(void) {
 
 #if defined(_10F200) || defined(_10F202) || defined(_10F204) || defined(_10F206) || defined(_10F220) || defined(_10F222)
-    OPTION = 0b11011111;  // disabled T0CKI
+    OPTION = 0b11011100;  // disabled T0CKI; WDT 1:16 (about 250ms))
 #elif defined(_10F320) || defined(_10F322)
     OSCCONbits.IRCF = 0b000;  // 31 kHz (LFINTOSC)
+    WDTCONbits.WDTPS = 0b01000;  //WDT 250ms
 #endif
 
 }
