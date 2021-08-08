@@ -16,5 +16,6 @@ See also:
 * [Plug version](Hardware/src/BatteryPackLoad.md)
 * [Pass-through version](Hardware/src/BatteryPackLoad-PT.md)
 * [Blog post](https://www.medo64.com/2021/08/battery-pack-load/)
+* [Repository](https://github.com/medo64/BatteryPackLoad)
 
 ![Boards](Resources/bpload.jpg)
